@@ -9,4 +9,4 @@ install:
 - git clone https://github.com/systemslab/popper /tmp/popper
 - pip install /tmp/popper/cli
 script:
-- popper run -f ./.ci.yml
+- popper run --substitution _STEP=$STEP --substitution _TAG=$TAG -f .ci.yml

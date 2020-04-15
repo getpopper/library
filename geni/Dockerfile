@@ -4,7 +4,7 @@ RUN pip install --no-cache-dir geni-lib==0.9.9.2
 
 ENV PYTHONUNBUFFERED=on
 
-COPY scripts/* /usr/bin/
-COPY util.py /usr/local/lib/python2.7/site-packages/geni/
+COPY scripts/build-context /usr/bin/
+COPY scripts/util.py /usr/local/lib/python2.7/site-packages/geni/
 
-ENTRYPOINT ["/usr/bin/entrypoint.sh"]
+ENTRYPOINT ["python"]
