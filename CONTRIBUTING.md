@@ -18,11 +18,6 @@ associated to. The folder needs to contain:
       * `Secrets`. If there are secrets that the image expects, as well
         as the format of these, it should be specified in this section.
 
-  * A `.ci/` folder containing a Popper workflow named `wf.yml`. This 
-    workflow is executed on every commit by the CI service in order to 
-    build the image and pushing it to the [`popperized` organization 
-    on Dockerhub][dh].
-
 In addition to the above, the pull request needs to also modify the 
 [`.travis.yml`](.travis.yml) file so that a new entry to the `env` 
 list is added (or modified if the version of an existing image is 
