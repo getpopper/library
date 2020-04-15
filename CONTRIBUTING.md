@@ -17,6 +17,9 @@ associated to. The folder needs to contain:
         environment, it should be documented here.
       * `Secrets`. If there are secrets that the image expects, as well
         as the format of these, it should be specified in this section.
+  * One or more workflow examples in an `examples/` folder. This 
+    should ideally be tested by the submitter as we don't run these on 
+    Travis CI.
 
 In addition to the above, the pull request needs to also modify the 
 [`.travis.yml`](.travis.yml) file so that a new entry to the `env` 

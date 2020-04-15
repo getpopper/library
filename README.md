@@ -10,13 +10,13 @@ workflow by adding it as a step:
 
 ```yaml
 steps:
-- uses: popperized/<STEP-NAME>@<SHA1>
+- uses: popperized/<STEP-NAME>@<TAG>
   args: ['arguments', 'for', 'the', 'step']
 ```
 
 Additional `env` and `secrets` options for a step might be required. 
-The `README` of each image contains `Environment` and `Secrets` and 
-`Versioning` information explaining this extra information that is 
+The `README` of for an image might contain `Environment` and `Secrets` 
+sections describing how to provide this extra information that is 
 specific to a step. For information about which tag to use, see the 
 corresponding repository at the [Dockerhub Registry][dh].
 
