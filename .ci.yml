@@ -1,0 +1,12 @@
+steps:
+- uses: docker://docker:19.03.3
+  args: [build, -t, 'popperized/$STEP:$TAG', '$STEP/']
+  secrets: [STEP, TAG] # not really secrets but they get injected as variables
+
+- uses: docker://docker:19.03.3
+  runs: bash
+  args: [-c,
+    'docker login -u $DOCKER_USER -p $DOCKER_PASSWORD &&
+     docker push popperized/$STEP:$TAG'
+  ]
+  secrets: [DOCKER_USER, DOCKER_PASSWORD, STEP, TAG]
