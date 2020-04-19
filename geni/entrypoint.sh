@@ -1,11 +1,10 @@
 #!/bin/bash
 set -e
 
-if [[ $# != 1 ]]; then
-  echo "Expecting path to script as single argument to entrypoint"
+if [[ $# == 0 ]]; then
+  echo "Expecting one or more arguments to entrypoint"
   exit 1
 fi
-
 
 function check_variable {
   if [ -z "${!1}" ]; then
@@ -24,7 +23,7 @@ check_variable GENI_KEY_PASSPHRASE
 echo "$GENI_CERT_DATA" | base64 --decode > /tmp/geni.cert
 echo "$GENI_PUBKEY_DATA" | base64 --decode > /tmp/pub.key
 
-cat > $PWD/geni-context.json <<EOL
+cat > /geni-context.json <<EOL
 {"user-name": "$GENI_USERNAME",
  "cert-path": "/tmp/geni.cert",
  "key-path": "/tmp/geni.cert",
