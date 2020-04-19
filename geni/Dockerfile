@@ -1,6 +1,8 @@
 FROM python:2.7-slim-jessie
 
-RUN pip install --no-cache-dir geni-lib==0.9.9.2
+ARG VERSION=0.9.9.2
+
+RUN pip install --no-cache-dir geni-lib==${VERSION}
 
 # - disable python buffering
 # - give preference to our build-context script

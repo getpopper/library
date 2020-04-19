@@ -1,11 +1,11 @@
 steps:
 - uses: docker://docker:19.03.3
-  args: [build, -t, 'popperized/$_STEP:$_TAG', '$_STEP/']
+  args: [build, -t, 'popperized/$_STEP:$_VERSION', '--build-arg', 'VERSION=$_VERSION', '$_STEP/']
 
 - uses: docker://docker:19.03.3
   runs: /bin/sh
   args: [-c,
     'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD &&
-     docker push popperized/$_STEP:$_TAG'
+     docker push popperized/$_STEP:$_VERSION'
   ]
   secrets: [DOCKER_USERNAME, DOCKER_PASSWORD]
