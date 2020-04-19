@@ -1,0 +1,26 @@
+steps:
+- uses: docker://popperized/geni:v0.9.9.2
+  args: ./one-baremetal-node.py
+  secrets:
+  - GENI_FRAMEWORK
+  - GENI_PROJECT
+  - GENI_USERNAME
+  - GENI_KEY_PASSPHRASE
+  - GENI_PUBKEY_DATA
+  - GENI_CERT_DATA
+
+# ...
+# we can include other steps here that would do something interesting
+# with the node we allocated
+# ...
+
+# lastly, we can release resources
+- uses: docker://popperized/geni:v0.9.9.2
+  args: ./release.py
+  secrets:
+  - GENI_FRAMEWORK
+  - GENI_PROJECT
+  - GENI_USERNAME
+  - GENI_KEY_PASSPHRASE
+  - GENI_PUBKEY_DATA
+  - GENI_CERT_DATA
