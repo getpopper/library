@@ -24,120 +24,99 @@ To use this image:
     Guides for obtaining credentials are available for 
     [`geni.net`][geni-creds] and [`cloudlab.us`][cl-cred]. 
 
- 2. Create a `geni-lib` context. In order to use the `geni-lib` 
-    library, it is necessary to create a context (a folder with 
-    authentication information) that is used to authenticate against a 
-    GENI site. A  `build-context` command is available this purpose 
-    (see more [here](#-build-context)).
+ 2. Define a list of environment variables that are expected by the 
+    [entrypoint](./entrypoint.sh) of the image. See [below](#-secrets) 
+    for the list of variables that are needed.
 
- 2. Execute arbitrary `geni-lib` scripts. Run arbitrary python scripts 
-    that make use of the `geni-lib` library, reading the previously 
-    built context in order to execute tasks on the GENI site. The 
-    `ENTRYPOINT` of this image is the Python interpreter, allowing to 
-    specify a script directly as an argument to the image (see more 
-    [here](#-execute-script)).
+ 3. Invoke the image and pass a Python script as argument. This script 
+    makes use of the `geni-lib` library (see more details 
+    [below](#-execute-script)).
 
 ### Example
 
-To use in a [Popper][pp] workflow:
+For a complete example, take a look at [the `example/` 
+folder](./example). To use this image in a [Popper][pp] workflow:
 
 ```yaml
 steps:
 
-# create the context information (store to `/workspace/.bssw/`)
-- uses: popperized/library/geni@59239c3
-  runs: build-context
-  env:
-    GENI_FRAMEWORK: cloudlab
+- uses: docker://popperized/geni:v0.9.9.2
+  args: ./one-baremetal-node.py
   secrets:
+  - GENI_FRAMEWORK
   - GENI_PROJECT
   - GENI_USERNAME
-  - GENI_PASSWORD
-  - GENI_PUBKEY_DATA
   - GENI_CERT_DATA
+  - GENI_KEY_PASSPHRASE
+  - GENI_PUBKEY_DATA
 
-# execute python script that invokes geni-lib API functions. The
-# invoked scripts make use of the context generated in the previous
-# in order to authenticate with GENI sites
-- uses: popperized/library/geni@59239c3
-  args: ./one-baremetal-node.py
-  secrets: [GENI_KEY_PASSPHRASE]
 
 # ...
-# one or more following steps that use of allocated resources.
+# one or more steps that use allocated resources.
 # ...
+
 
 # lastly, we can release resources
-- uses: popperized/library/geni@59239c3
+- uses: docker://popperized/geni:v0.9.9.2
   args: ./release.py
-  secrets: [GENI_KEY_PASSPHRASE]
+  secrets:
+  - GENI_FRAMEWORK
+  - GENI_PROJECT
+  - GENI_USERNAME
+  - GENI_CERT_DATA
+  - GENI_KEY_PASSPHRASE
+  - GENI_PUBKEY_DATA
 ```
 
-The first step builds a context by providing credentials for the GENI 
-site (CloudLab in this case) in the form of [step secrets][secrets]. 
-These in turn are consumed by the [`build-context`][build-context] 
-utility that is installed along with `geni-lib`.
+## Execute scripts
 
-The second  and last steps run arbitrary Python scripts that make use 
-of the `geni-lib` library. These scripts load the context created 
-previously and interact with a GENI site to obtain resources, fetch 
-metadata about available infrastructure, and release resources at the 
-end.
+Prior to executing requests to a GENI site, the Python script passed 
+as argument to the image has to load a context by invoking the 
+[`geni.util.loadContext()`][loadctx] function as follows:
 
-The scripts used in the above example can be found [here](./example); 
-they are expected to be executed against CloudLab infrastructure. The 
-value of `GENI_KEY_PASSPHRASE` in this case is CloudLab's account 
-password (see [Execute script section](#-execute-script) for more).
+```python
+util.loadContext(path=os.getcwd() + "/geni-context.json",
+                 key_passphrase=os.environ['GENI_KEY_PASSPHRASE'])
+```
 
-## `build-context`
+The two arguments are:
 
-This is a wrapper to the [`build-context`][build-context] tool 
-installed as part of the `geni-lib` Python package. The context is 
-stored in the `$PWD/.geni/` folder, where `PWD` is the current working 
-directory defined in the container (e.g. via the `--workdir` flag to 
-`docker run`).
+ 1. The path to a context JSON file (`path` argument), which the 
+    docker image stores on `/workspace/geni-context.json` prior to 
+    invoking the Python runtime (see details [here](./entrypoint)).
 
-### Environment
+ 2. The key passphrase (via the `key_passphrase` argument) for the 
+    certificate given provided in the `GENI_CERT_DATA` variable.
+    The `GENI_KEY_PASSPHRASE` variable contains this information, thus 
+    it can be given to the `geni.util.loadContext()` function by 
+    reading it from the environment as shown above.
 
-  * `GENI_FRAMEWORK`. **Required** One of `cloudlab`, `emulab`, 
-    `portal` and `geni`.
+After the context has been loaded, the script can invoke any arbitrary 
+tasks using the `geni-lib` library. Consult the [official `geni-lib` 
+documentation][geni-docs] for more information on how to use 
+`geni-lib`. Concrete examples can be found [here][geni-ex] and 
+[here][cl-geni-ex].
 
-### Secrets
+## Secrets
 
+The entrypoint to the image expects the following secrets:
+
+  * `GENI_FRAMEWORK`. **Required** One of `emulab-ch2` (CloudLab), 
+    `emulab`, `portal`, or `geni`.
   * `GENI_PROJECT`. **Required** The name of the project.
   * `GENI_USERNAME` **Required** Name of username for GENI account.
-  * `GENI_PASSWORD` **Required** Password for user.
   * `GENI_PUBKEY_DATA`. **Required** A base64-encoded string 
-    containing the public SSH key for the user authenticating with the 
-    site. Example encoding from a terminal: `cat $HOME/.ssh/mykey.pub 
+  containing the public SSH key for the user authenticating with the 
+  site. Example encoding from a terminal: `cat $HOME/.ssh/mykey.pub 
     | base64`.
   * `GENI_CERT_DATA` **Required**. A base64-encoded string containing 
     the certificate issued by the GENI member site. Guides for 
     obtaining credentials are available for [`geni.net`][geni-creds] 
     and [`cloudlab.us`][cl-cred]. Example encoding from a terminal: 
     `cat cloudlab.pem | base64`.
-
-## Execute script
-
-A script provided as argument to the image can load a context (see 
-previous sections) by invoking the 
-[`geni.util.loadContext()`][loadctx] function and execute arbitrary 
-orchestration tasks against GENI infrastructure. Check the [official 
-`geni-lib` documentation][geni-docs] for more information on how to 
-use `geni-lib`. Concrete examples can be found [here][geni-ex] and 
-[here][cl-geni-ex].
-
-> **NOTE**: in non-interactive mode, the `geni.util.loadContext()` 
-> function requires the key passphrase (via the `key_passphrase` 
-> argument) for the public key provided to the action that builds the 
-> context. In those cases, the `GENI_KEY_PASSPHRASE` secret needs to 
-> be defined and passed to the `geni.util.loadContext()` function. See 
-> an example [here](.ci/teardown.py).
-
-#### Secrets
-
-  * `GENI_KEY_PASSPHRASE`. **Optional** The key passphrase associated 
-    to the public key used when building a context.
+  * `GENI_KEY_PASSPHRASE`. **Required** The key passphrase associated 
+    to the certificate given in `GENI_CERT_DATA`. In the case of 
+    CloudLab, this is the password used to login to the web GUI.
 
 [from-bundle]: https://geni-lib.readthedocs.io/en/latest/tutorials/portalcontext.html
 [geni-docs]: https://geni-lib.rtfd.io/en/latest/
