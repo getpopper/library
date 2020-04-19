@@ -1,12 +1,12 @@
-# Popper steps
+# Docker Images for Popper Workflows
 
 This repository contains source code of docker images that are used in 
 [Popper][pp] workflows.
 
-## How to use a step
+## How to use an image
 
 Once you find an image that suits your needs, you can use it in a 
-workflow by adding it as a step:
+workflow by referencing it in a step:
 
 ```yaml
 steps:
@@ -15,10 +15,11 @@ steps:
 ```
 
 Additional `env` and `secrets` options for a step might be required. 
-The `README` of for an image might contain `Environment` and `Secrets` 
-sections describing how to provide this extra information that is 
-specific to a step. For information about which tag to use, see the 
-corresponding repository at the [Dockerhub Registry][dh].
+The `README` of for an image will contain `Environment` and `Secrets` 
+sections describing how to provide this extra information. For 
+information about which tags are available for an image, visit the 
+corresponding repository of the [`popperized` organization at 
+Dockerhub][dh].
 
 ## Contributing
 
