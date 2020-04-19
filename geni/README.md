@@ -75,15 +75,15 @@ as argument to the image has to load a context by invoking the
 [`geni.util.loadContext()`][loadctx] function as follows:
 
 ```python
-util.loadContext(path=os.getcwd() + "/geni-context.json",
+util.loadContext(path="/geni-context.json",
                  key_passphrase=os.environ['GENI_KEY_PASSPHRASE'])
 ```
 
 The two arguments are:
 
  1. The path to a context JSON file (`path` argument), which the 
-    docker image stores on `/workspace/geni-context.json` prior to 
-    invoking the Python runtime (see details [here](./entrypoint)).
+    entrypoint to the image stores it on `/geni-context.json` prior to 
+    invoking the Python runtime (see details [here](./entrypoint.sh)).
 
  2. The key passphrase (via the `key_passphrase` argument) for the 
     certificate given provided in the `GENI_CERT_DATA` variable.
@@ -106,8 +106,8 @@ The entrypoint to the image expects the following secrets:
   * `GENI_PROJECT`. **Required** The name of the project.
   * `GENI_USERNAME` **Required** Name of username for GENI account.
   * `GENI_PUBKEY_DATA`. **Required** A base64-encoded string 
-  containing the public SSH key for the user authenticating with the 
-  site. Example encoding from a terminal: `cat $HOME/.ssh/mykey.pub 
+    containing the public SSH key for the user authenticating with the 
+    site. Example encoding from a terminal: `cat $HOME/.ssh/mykey.pub 
     | base64`.
   * `GENI_CERT_DATA` **Required**. A base64-encoded string containing 
     the certificate issued by the GENI member site. Guides for 
