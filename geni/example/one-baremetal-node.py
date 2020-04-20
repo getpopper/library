@@ -16,7 +16,7 @@ request.addResource(node)
 # }
 
 # load context
-ctx = util.loadContext(os.getcwd() + "/geni-context.json",
+ctx = util.loadContext(path="/geni-context.json",
                        key_passphrase=os.environ['GENI_KEY_PASSPHRASE'])
 
 # create slice
