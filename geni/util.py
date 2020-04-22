@@ -358,7 +358,7 @@ def saveAggregates (ammap, path = None):
     f.write(data)
 
 
-def loadContext (path = None, key_passphrase = None):
+def loadContext (path = None, key_passphrase = ):
   import geni._coreutil as GCU
   from geni.aggregate import FrameworkRegistry
   from geni.aggregate.context import Context
@@ -548,6 +548,16 @@ def buildContextFromBundle (bundle_path, pubkey_path = None, cert_pkey_path = No
   cdata["user-pubkeypath"] = pkpath
   cdata["project"] = project
   json.dump(cdata, open("%s/context.json" % (DEF_DIR), "w+"))
+
+
+def loadCtx():
+    """opinionated loadContext(); fixed path for context and loading key
+    passphrase from environment variable
+    """
+    key_passphrase = os.environ.get('GENI_KEY_PASSPHRASE', None)
+    if not key_passphrase:
+        raise Exception('Expecting GENI_KEY_PASSPHRASE')
+    return loadContext('/geni-context.json', key_passphrase)
 
 
 def _buildContext (framework, cert_path, key_path, username, user_urn, pubkey_path, project, path=None):

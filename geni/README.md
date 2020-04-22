@@ -25,12 +25,12 @@ To use this image:
     [`geni.net`][geni-creds] and [`cloudlab.us`][cl-cred]. 
 
  2. Define a list of environment variables that are expected by the 
-    [entrypoint](./entrypoint.sh) of the image. See [below](#-secrets) 
+    [entrypoint](./entrypoint.sh) of the image. See [below](#secrets) 
     for the list of variables that are needed.
 
  3. Invoke the image and pass a Python script as argument. This script 
     makes use of the `geni-lib` library (see more details 
-    [below](#-execute-script)).
+    [below](#execute-script)).
 
 ### Example
 
@@ -41,7 +41,7 @@ folder](./example). To use this image in a [Popper][pp] workflow:
 steps:
 
 - uses: docker://popperized/geni:v0.9.9.2
-  args: ./one-baremetal-node.py
+  args: ['./geni_config.py', 'apply']
   secrets:
   - GENI_FRAMEWORK
   - GENI_PROJECT
@@ -58,7 +58,7 @@ steps:
 
 # lastly, we can release resources
 - uses: docker://popperized/geni:v0.9.9.2
-  args: ./release.py
+  args: ['./geni_config.py', 'destroy']
   secrets:
   - GENI_FRAMEWORK
   - GENI_PROJECT
@@ -70,36 +70,32 @@ steps:
 
 ## Execute scripts
 
-Prior to executing requests to a GENI site, the Python script passed 
-as argument to the image has to load a context by invoking the 
-[`geni.util.loadContext()`][loadctx] function as follows:
+Prior to executing requests to a GENI site using the `geni-lib` 
+library, the Python script passed as argument to the image has to load 
+a context by invoking the `geni.util.loadCtx()` function as follows:
 
 ```python
-util.loadContext(path="/geni-context.json",
-                 key_passphrase=os.environ['GENI_KEY_PASSPHRASE'])
+from geni import util
+
+# ...
+
+ctx = util.loadCtx()
+
+# from this point on, the ctx object is can be passed to functions from
+# geni-lib that manipulate (request, release, modify) resources
 ```
 
-The two arguments are:
-
- 1. The path to a context JSON file (`path` argument), which the 
-    entrypoint to the image stores it on `/geni-context.json` prior to 
-    invoking the Python runtime (see details [here](./entrypoint.sh)).
-
- 2. The key passphrase (via the `key_passphrase` argument) for the 
-    certificate given provided in the `GENI_CERT_DATA` variable.
-    The `GENI_KEY_PASSPHRASE` variable contains this information, thus 
-    it can be given to the `geni.util.loadContext()` function by 
-    reading it from the environment as shown above.
-
-After the context has been loaded, the script can invoke any arbitrary 
-tasks using the `geni-lib` library. Consult the [official `geni-lib` 
-documentation][geni-docs] for more information on how to use 
-`geni-lib`. Concrete examples can be found [here][geni-ex] and 
-[here][cl-geni-ex].
+The `loadCtx()` function expects a `GENI_KEY_PASSPHRASE` variable 
+containing the passphrase for the given certificate (`GENI_CERT_DATA` 
+variable). After the context has been loaded, the script can invoke 
+any arbitrary tasks using the `geni-lib` library. Consult the 
+[official `geni-lib` documentation][geni-docs] for more information on 
+how to use `geni-lib`. Concrete examples can be found [here][geni-ex] 
+and [here][cl-geni-ex].
 
 ## Secrets
 
-The entrypoint to the image expects the following secrets:
+The `ENTRYPOINT` to the image expects the following secrets:
 
   * `GENI_FRAMEWORK`. **Required** One of `emulab-ch2` (CloudLab), 
     `emulab`, `portal`, or `geni`.
@@ -129,4 +125,3 @@ The entrypoint to the image expects the following secrets:
 [pp]: https://github.com/systemslab/popper
 [geni-creds]: https://geni-lib.rtfd.io/en/latest/intro/creds/portal.html
 [cl-creds]: https://geni-lib.rtfd.io/en/latest/intro/creds/cloudlab.html
-[loadctx]: https://bitbucket.org/barnstorm/geni-lib/src/1b480c83581207300f73679af6844d327794d45e/geni/util.py#lines-357

@@ -1,6 +1,6 @@
 steps:
 - uses: docker://popperized/geni:v0.9.9.2
-  args: ./one-baremetal-node.py
+  args: ['./geni_config.py', 'apply']
   secrets:
   - GENI_FRAMEWORK
   - GENI_PROJECT
@@ -16,7 +16,7 @@ steps:
 
 # lastly, we can release resources
 - uses: docker://popperized/geni:v0.9.9.2
-  args: ./release.py
+  args: ['./geni_config.py', 'destroy']
   secrets:
   - GENI_FRAMEWORK
   - GENI_PROJECT
