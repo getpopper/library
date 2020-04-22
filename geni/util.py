@@ -358,7 +358,7 @@ def saveAggregates (ammap, path = None):
     f.write(data)
 
 
-def loadContext (path = None, key_passphrase = ):
+def loadContext (path = None, key_passphrase = None):
   import geni._coreutil as GCU
   from geni.aggregate import FrameworkRegistry
   from geni.aggregate.context import Context
