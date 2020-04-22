@@ -22,7 +22,7 @@ To use this image:
 
  1. Obtain credentials for the GENI site you want to connect to. 
     Guides for obtaining credentials are available for 
-    [`geni.net`][geni-creds] and [`cloudlab.us`][cl-cred]. 
+    [`geni.net`][geni-creds] and [`cloudlab.us`][cl-creds]. 
 
  2. Define a list of environment variables that are expected by the 
     [entrypoint](./entrypoint.sh) of the image. See [below](#secrets) 
