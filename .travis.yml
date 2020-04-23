@@ -5,10 +5,11 @@ python: 3.7
 services: docker
 env:
 - STEP=geni VERSION=v0.9.9.2
-- STEP=ansible VERSION=2.6.20
 - STEP=ansible VERSION=2.7.17
 - STEP=ansible VERSION=2.8.11
 - STEP=ansible VERSION=2.9.7
+- STEP=ceph-ansible VERSION=v3.2.42
+- STEP=ceph-ansible VERSION=v4.0.22
 install:
 - git clone https://github.com/systemslab/popper /tmp/popper
 - pip install /tmp/popper/cli
