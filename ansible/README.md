@@ -13,7 +13,7 @@ connect to ansible hosts. The command invoked by the entrypoint is the
 
 ```yaml
 steps:
-- uses: docker://popperized/ansible:v2.9
+- uses: docker://getpopper/ansible:v2.9
   args: ['-i', 'ansible/hosts.ini', 'ansible/playbooks/dosomething.yml']
   secrets: [ANSIBLE_SSH_KEY_DATA]
 ```

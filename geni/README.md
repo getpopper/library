@@ -40,7 +40,7 @@ folder](./example). To use this image in a [Popper][pp] workflow:
 ```yaml
 steps:
 
-- uses: docker://popperized/geni:v0.9.9.2
+- uses: docker://getpopper/geni:v0.9.9.2
   args: ['./geni_config.py', 'apply']
   secrets:
   - GENI_FRAMEWORK
@@ -57,7 +57,7 @@ steps:
 
 
 # lastly, we can release resources
-- uses: docker://popperized/geni:v0.9.9.2
+- uses: docker://getpopper/geni:v0.9.9.2
   args: ['./geni_config.py', 'destroy']
   secrets:
   - GENI_FRAMEWORK

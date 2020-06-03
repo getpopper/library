@@ -4,7 +4,7 @@ from geni.aggregate import cloudlab
 from geni.rspec import pg
 from geni import util
 
-experiment_name = 'popperized-geni-example'
+experiment_name = 'popper-geni-example'
 command = sys.argv[1]
 
 # load context

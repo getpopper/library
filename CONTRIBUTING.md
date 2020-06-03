@@ -28,4 +28,4 @@ bumped), which is how processing of the image communicated to the CI
 build.
 
 [gh]: https://help.github.com/articles/about-pull-requests/
-[dh]: https://hub.docker.com/orgs/popperized
+[dh]: https://hub.docker.com/orgs/getpopper
