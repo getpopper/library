@@ -11,7 +11,7 @@ env:
 - STEP=ceph-ansible VERSION=v3.2.42
 - STEP=ceph-ansible VERSION=v4.0.22
 install:
-- git clone https://github.com/systemslab/popper /tmp/popper
+- git clone https://github.com/getpopper/popper /tmp/popper
 - pip install /tmp/popper/cli
 script:
 - popper run --substitution _STEP=$STEP --substitution _VERSION=$VERSION -f .ci.yml
