@@ -10,6 +10,7 @@ env:
 - STEP=ansible VERSION=2.9.7
 - STEP=ceph-ansible VERSION=v3.2.42
 - STEP=ceph-ansible VERSION=v4.0.22
+- STEP=csvtool VERSION=2.4
 install:
 - git clone https://github.com/getpopper/popper /tmp/popper
 - pip install /tmp/popper/cli
