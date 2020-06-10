@@ -1,11 +1,15 @@
 steps:
 - uses: docker://docker:19.03.3
   args: [build, -t, 'getpopper/$_STEP:$_VERSION', '--build-arg', 'VERSION=$_VERSION', '$_STEP/']
-
 - uses: docker://docker:19.03.3
-  runs: [/bin/sh]
-  args: [-c,
-    'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD &&
-     docker push getpopper/$_STEP:$_VERSION'
-  ]
+  secrets: [DOCKER_USERNAME, DOCKER_PASSWORD]
+  runs: ['/bin/sh']
+  args:
+  - -c
+  - |
+    # only push from master branch
+    if [[ $GIT_BRANCH == "master" ]]; then
+      docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      docker push getpopper/$_STEP:$_VERSION
+    fi
   secrets: [DOCKER_USERNAME, DOCKER_PASSWORD]
