@@ -15,6 +15,6 @@ env:
 - STEP=heroku-cli VERSION=7.42.1
 install:
 - git clone https://github.com/getpopper/popper /tmp/popper
-- pip install /tmp/popper/cli
+- pip install /tmp/popper/src
 script:
 - popper run --substitution _STEP=$STEP --substitution _VERSION=$VERSION -f .ci.yml
