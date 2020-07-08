@@ -13,6 +13,7 @@ env:
 - STEP=csvtool VERSION=2.4
 - STEP=hasura-cli VERSION=v1.2.2
 - STEP=heroku-cli VERSION=7.42.1
+- STEP=fio-plot VERSION=3.12-2
 install:
 - git clone https://github.com/getpopper/popper /tmp/popper
 - pip install /tmp/popper/src
