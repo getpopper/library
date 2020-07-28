@@ -99,7 +99,7 @@ The `ENTRYPOINT` to the image expects the following secrets:
 
   * `GENI_FRAMEWORK`. **Required** One of `emulab-ch2` (CloudLab), 
     `emulab`, `portal`, or `geni`.
-  * `GENI_PROJECT`. **Required** The name of the project.
+  * `GENI_PROJECT`. **Required** The name of the project, **all lower case**.
   * `GENI_USERNAME` **Required** Name of username for GENI account.
   * `GENI_PUBKEY_DATA`. **Required** A base64-encoded string 
     containing the public SSH key for the user authenticating with the 
