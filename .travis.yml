@@ -14,8 +14,8 @@ env:
 - STEP=hasura-cli VERSION=v1.2.2
 - STEP=heroku-cli VERSION=7.42.1
 - STEP=fio-plot VERSION=3.12-2
-- STEP=R/rstudio VERSION=4.0.0
-- STEP=R/verse VERSION=4.0.0
+- STEP=r/rstudio VERSION=4.0.0
+- STEP=r/verse VERSION=4.0.0
 install:
 - git clone https://github.com/getpopper/popper /tmp/popper
 - pip install /tmp/popper/src
