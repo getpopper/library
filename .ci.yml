@@ -1,15 +1,18 @@
 steps:
 - uses: docker://docker:19.03.3
-  args: [build, -t, 'getpopper/$_STEP:$_VERSION', '--build-arg', 'VERSION=$_VERSION', '$_STEP/']
-- uses: docker://docker:19.03.3
   secrets: [DOCKER_USERNAME, DOCKER_PASSWORD]
-  runs: ['/bin/sh']
+  runs: [sh, -uec]
   args:
-  - -c
   - |
+    # cleanup name of image
+    IMG=$(echo '$_STEP' | sed -e 's/\//-/g')
+
+    docker build \
+      -t getpopper/$IMG:$_VERSION \
+      --build-arg VERSION=$_VERSION $_STEP
+
     # only push from master branch
     if [[ $GIT_BRANCH == "master" ]]; then
       docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-      docker push getpopper/$_STEP:$_VERSION
+      docker push getpopper/$IMG:$_VERSION
     fi
-  secrets: [DOCKER_USERNAME, DOCKER_PASSWORD]
