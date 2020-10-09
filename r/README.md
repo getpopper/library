@@ -1,7 +1,7 @@
 # rstudio
 
 Images for using R with Popper. Each folder contains `Dockerfile` based on the 
-Rocker image of the same name
+[Rocker](https://www.rocker-project.org/) image of the same name
 
 
 ## License
